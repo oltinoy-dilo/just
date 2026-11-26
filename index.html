@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mado uchun</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Layout: bir ustunli, chapga tekislangan sahifa. Yuqorida quyosh, o'rtada kichik bo'limlar, oxirida rasm va qo'shiq. */
+  :root {
+    --bg: #F2FAF5;
+    --surface: #FFFFFF;
+    --warm: #FFF4D6;
+    --fg: #16302B;
+    --muted: #4C6A63;
+    --teal: #1B7A69;
+    --sun: #F2B632;
+    --sun-ink: #2E2200;
+    --line: #CFE5DB;
+    --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1E1B;
+      --surface: #152A26;
+      --warm: #2B2512;
+      --fg: #E6F4EE;
+      --muted: #9BBDB3;
+      --teal: #5ED0B5;
+      --sun: #F2C14E;
+      --sun-ink: #2A1F00;
+      --line: #264541;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1E1B;
+    --surface: #152A26;
+    --warm: #2B2512;
+    --fg: #E6F4EE;
+    --muted: #9BBDB3;
+    --teal: #5ED0B5;
+    --sun: #F2C14E;
+    --sun-ink: #2A1F00;
+    --line: #264541;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    padding-block: 24px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+  .hero { position: relative; overflow: hidden; padding: 28px 0 8px; }
+  .sun {
+    position: absolute; top: -40px; right: -50px;
+    width: clamp(150px, 34vw, 240px); aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFE59A 0%, var(--sun) 55%, #E39A17 100%);
+    opacity: .95;
+  }
+  .hero > *:not(.sun) { position: relative; }
+  .eyebrow {
+    font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--teal); margin: 0 0 12px;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2.5rem, 9vw, 4.4rem); line-height: 1.02; letter-spacing: -.02em;
+    margin: 0 0 16px; text-wrap: balance; max-width: 11ch;
+  }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 34ch; margin: 0; }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.5rem;
+    line-height: 1.2; margin: 0 0 6px; text-wrap: balance;
+  }
+  .sub { color: var(--muted); margin: 0 0 18px; font-size: .98rem; }
+
+  button, .btn {
+    font: inherit; font-weight: 700; cursor: pointer; border: 0;
+    border-radius: 999px; padding: 12px 22px; min-height: 46px;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none;
+  }
+  button:focus-visible, .btn:focus-visible, input:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+  .btn-sun { background: var(--sun); color: var(--sun-ink); }
+  .btn-sun:hover { filter: brightness(1.05); }
+  .btn-line { background: transparent; color: var(--fg); border: 2px solid var(--teal); }
+
+  /* Iliq so'z */
+  .words { background: var(--warm); border-radius: 28px 28px 28px 6px; padding: 26px 24px 24px; }
+  .msg {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(1.3rem, 4.6vw, 1.8rem); line-height: 1.25;
+    min-height: 4.6em; margin: 0 0 18px; text-wrap: balance;
+    transition: opacity .25s ease;
+  }
+  .msg.fade { opacity: 0; }
+
+  /* Kichik quvonchlar */
+  .tasks { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .tasks li { border-bottom: 1px solid var(--line); }
+  .tasks label { display: flex; gap: 14px; align-items: center; padding: 14px 2px; cursor: pointer; }
+  .tasks input {
+    appearance: none; width: 26px; height: 26px; flex: none; margin: 0;
+    border: 2px solid var(--teal); border-radius: 8px; background: transparent;
+    display: grid; place-content: center; cursor: pointer;
+  }
+  .tasks input::after {
+    content: ""; width: 12px; height: 7px; border-left: 3px solid var(--sun-ink); border-bottom: 3px solid var(--sun-ink);
+    transform: rotate(-45deg) translate(1px, -1px); opacity: 0;
+  }
+  .tasks input:checked { background: var(--sun); border-color: var(--sun); }
+  .tasks input:checked::after { opacity: 1; }
+  .tasks input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .progress { margin: 14px 0 0; font-weight: 700; color: var(--teal); min-height: 1.6em; }
+
+  /* Nafas */
+  .breath { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  .orb-box { width: 170px; height: 170px; display: grid; place-items: center; flex: none; }
+  .orb {
+    width: 150px; height: 150px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--teal) 55%, #fff) 0%, var(--teal) 100%);
+    transform: scale(.62);
+  }
+  .orb.run { animation: breathe 10s ease-in-out infinite; }
+  @keyframes breathe { 0%, 100% { transform: scale(.62); } 40% { transform: scale(1); } }
+  .breath-text { flex: 1; min-width: 200px; }
+  .phase { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; margin: 0 0 12px; min-height: 1.3em; }
+
+  /* Final: rasm va qo'shiq */
+  .finale { border-top: 1px solid var(--line); padding-top: 32px; display: flex; flex-direction: column; gap: 22px; }
+  .art { margin: 0; }
+  .art img { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 22px; background: #000; }
+  .song { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+  .song-info { min-width: 0; }
+  .song audio { flex: 1 1 100%; width: 100%; min-width: 0; }
+  .song-label { font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin: 0 0 2px; }
+  .song-title { font-family: var(--font-display); font-weight: 800; font-size: 1.7rem; line-height: 1.1; margin: 0; }
+  .song-artist { color: var(--muted); margin: 2px 0 0; }
+  .signoff { color: var(--muted); font-size: .98rem; margin: 0; }
+  .signoff strong { color: var(--fg); }
+
+  /* Kirish sahifasi: savol, yashil barglar */
+  .intro { position: relative; overflow: hidden; min-height: calc(100svh - 80px); display: grid; place-items: center; padding: 28px 8px; }
+  .leaves { position: absolute; inset: 0; pointer-events: none; }
+  .leaf, .leaf-deco, .bleaf {
+    position: absolute; display: block; overflow: hidden; border-radius: 0 100% 0 100%;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--teal) 55%, #8BE36B), var(--teal));
+  }
+  .leaf::after, .leaf-deco::after, .bleaf::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 130%; height: 2px;
+    background: rgba(255, 255, 255, .45); transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .leaf { top: -8%; left: var(--x); width: var(--s); height: var(--s); opacity: 0; animation: fall var(--d) linear var(--delay) infinite; }
+  @keyframes fall {
+    0% { top: -8%; transform: translateX(0) rotate(0deg); opacity: 0; }
+    8% { opacity: .95; }
+    50% { transform: translateX(var(--sway)) rotate(180deg); }
+    92% { opacity: .95; }
+    100% { top: 104%; transform: translateX(0) rotate(360deg); opacity: 0; }
+  }
+  .dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--sun); animation: twinkle 3.2s ease-in-out infinite; }
+  @keyframes twinkle { 0%, 100% { transform: scale(.6); opacity: .5; } 50% { transform: scale(1.2); opacity: 1; } }
+  .card {
+    position: relative; z-index: 1; width: 100%; max-width: 520px;
+    background: var(--warm); border: 2px solid var(--teal); border-radius: 8px;
+    box-shadow: 10px 10px 0 var(--sun); padding: 34px 28px 30px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; text-align: center;
+  }
+  .leaf-deco { z-index: 2; width: 46px; height: 46px; }
+  .leaf-deco.tl { top: -26px; left: -20px; transform: rotate(-70deg); }
+  .leaf-deco.tr { top: -30px; right: -16px; width: 38px; height: 38px; transform: rotate(10deg); }
+  .leaf-deco.bl { bottom: -26px; left: -14px; width: 38px; height: 38px; transform: rotate(170deg); }
+  .leaf-deco.br { bottom: -30px; right: -20px; transform: rotate(90deg); }
+  .q { text-align: center; max-width: none; font-size: clamp(2rem, 7.5vw, 3.1rem); line-height: 1.05; margin: 0 0 24px; }
+  .answers { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: center; }
+  .btn-yes { font-size: calc(1rem * var(--ys, 1)); padding: .75em 1.8em; }
+  .btn-no { font-size: calc(1rem * var(--ns, 1)); padding: .75em 1.8em; }
+  .hint { text-align: center; margin: 16px 0 0; color: var(--muted); font-weight: 600; min-height: 1.6em; }
+  .love-text { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 5.2vw, 2rem); line-height: 1.25; margin: 0 0 22px; text-wrap: balance; }
+  .love-form { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .love-form input { width: 100%; font: inherit; color: var(--fg); background: var(--surface); border: 2px solid var(--teal); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .love-form input::placeholder { color: var(--muted); }
+  .burst { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+  .bleaf { left: 50%; top: 50%; width: var(--s); height: var(--s); opacity: 0; animation: burst 1.6s cubic-bezier(.15, .7, .3, 1) forwards; }
+  @keyframes burst {
+    0% { transform: translate(-50%, -50%) scale(.3) rotate(0deg); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(1) rotate(var(--br)); opacity: 0; }
+  }
+  .reply-form { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .reply-form textarea { width: 100%; font: inherit; color: var(--fg); background: var(--surface); border: 2px solid var(--teal); border-radius: 8px; padding: 12px 14px; resize: vertical; min-height: 110px; }
+  .reply-form textarea::placeholder { color: var(--muted); }
+  .reply-form textarea:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+  .reply-hint { text-align: left; margin-bottom: 10px; }
+  .owner-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .owner-name { font-weight: 700; color: var(--teal); margin: 0; }
+  .owner-msg { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb.run { animation: none; transform: scale(.85); }
+    .msg { transition: none; }
+    .leaf { animation: none; opacity: .85; top: var(--ty, 20%); }
+    .dot { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="intro" id="intro">
+  <div class="sun" aria-hidden="true"></div>
+  <div class="leaves" id="leaves" aria-hidden="true"></div>
+  <span class="dot" style="left:10%;top:20%" aria-hidden="true"></span>
+  <span class="dot" style="left:86%;top:32%;animation-delay:-1s" aria-hidden="true"></span>
+  <span class="dot" style="left:18%;top:82%;animation-delay:-2s" aria-hidden="true"></span>
+  <span class="dot" style="left:80%;top:86%;animation-delay:-.5s" aria-hidden="true"></span>
+  <span class="dot" style="left:52%;top:7%;animation-delay:-1.6s" aria-hidden="true"></span>
+  <section class="card" aria-labelledby="q">
+    <span class="leaf-deco tl" aria-hidden="true"></span>
+    <span class="leaf-deco tr" aria-hidden="true"></span>
+    <span class="leaf-deco bl" aria-hidden="true"></span>
+    <span class="leaf-deco br" aria-hidden="true"></span>
+    <h1 class="q" id="q">Will u forever be my friend?</h1>
+    <div class="answers" id="answers">
+      <button class="btn-sun btn-yes" id="yes" type="button">Yes</button>
+      <button class="btn-line btn-no" id="no" type="button">No</button>
+    </div>
+    <p class="hint" id="hint" aria-live="polite"></p>
+  </section>
+</div>
+
+<div class="intro" id="love" hidden>
+  <div class="sun" aria-hidden="true"></div>
+  <span class="dot" style="left:12%;top:24%" aria-hidden="true"></span>
+  <span class="dot" style="left:88%;top:40%;animation-delay:-1.2s" aria-hidden="true"></span>
+  <span class="dot" style="left:22%;top:84%;animation-delay:-2.2s" aria-hidden="true"></span>
+  <span class="dot" style="left:76%;top:88%;animation-delay:-.6s" aria-hidden="true"></span>
+  <section class="card" aria-labelledby="love-q">
+    <span class="leaf-deco tl" aria-hidden="true"></span>
+    <span class="leaf-deco tr" aria-hidden="true"></span>
+    <span class="leaf-deco bl" aria-hidden="true"></span>
+    <span class="leaf-deco br" aria-hidden="true"></span>
+    <p class="love-text" id="love-q">Well, if you truly want to be my friend forever, write "I love you" here 😁</p>
+    <form class="love-form" id="loveForm" autocomplete="off">
+      <input id="loveInput" type="text" aria-label="Write your answer here" placeholder="Write here...">
+      <button class="btn-sun" type="submit">Continue</button>
+    </form>
+    <p class="hint" id="loveHint" aria-live="polite"></p>
+  </section>
+</div>
+
+<main class="wrap" id="main" hidden>
+  <header class="hero">
+    <div class="sun" aria-hidden="true"></div>
+    <p class="eyebrow">Sizga kichik sovg'a</p>
+    <h1>Salom, Mado!</h1>
+    <p class="lead">Bu sahifa sizga quvonch ulashish uchun tayyorlandi. Pastga tushing va tabassum qiling.</p>
+  </header>
+
+  <section class="words" aria-labelledby="t-words">
+    <h2 id="t-words">Bugungi iliq so'z</h2>
+    <p class="sub">Tugmani bosing, har safar yangisi chiqadi.</p>
+    <p class="msg" id="msg" aria-live="polite">Siz bilan suhbatlashish menga juda yoqadi.</p>
+    <button class="btn-sun" id="more" type="button">Yana bir so'z</button>
+  </section>
+
+  <section aria-labelledby="t-tasks">
+    <h2 id="t-tasks">Bugungi kichik quvonchlar</h2>
+    <p class="sub">Hammasi shart emas. Qaysi biri yoqsa, o'shani belgilab boring.</p>
+    <ul class="tasks" id="tasks">
+      <li><label><input type="checkbox" id="c1"><span>Bir piyola iliq choy ichish</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>Derazani ochib, quyoshga tabassum qilish</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>Yoqtirgan qo'shig'ingizni baland qo'yib, ozgina raqsga tushish</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>Birovga bugun kulgi sovg'a qilish</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>O'zingizni bir marta maqtab qo'yish</span></label></li>
+    </ul>
+    <p class="progress" id="progress" aria-live="polite"></p>
+  </section>
+
+  <section aria-labelledby="t-breath">
+    <h2 id="t-breath">Bir daqiqa tinchlik</h2>
+    <p class="sub">Doira kattalashganda nafas oling, kichrayganda sekin chiqaring.</p>
+    <div class="breath">
+      <div class="orb-box"><div class="orb" id="orb" aria-hidden="true"></div></div>
+      <div class="breath-text">
+        <p class="phase" id="phase" aria-live="off">Tayyormisiz?</p>
+        <button class="btn-line" id="go" type="button">Boshlash</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="finale" aria-labelledby="t-finale">
+    <h2 id="t-finale">Maybe we've never met in real life, but these could be our souls.</h2>
+    <figure class="art">
+      <img src="denji-reza.jpg" alt="Qora fonda qo'l ushlab yurgan ikki manga qahramoni: pushti rangdagi yigit va ko'k rangdagi qiz. Rasm yonida inglizcha yozuv bor: Billions of hands and yet I only wish to hold yours." width="736" height="736">
+    </figure>
+    <div class="song">
+      <div class="song-info">
+        <p class="song-label">Shu rasm uchun qo'shiq</p>
+        <p class="song-title">YKWIM?</p>
+        <p class="song-artist">Yot Club</p>
+      </div>
+      <audio id="song" controls preload="metadata" src="ykwim.mp3" aria-label="YKWIM? qo'shig'i"></audio>
+    </div>
+    <p class="signoff"><strong>Hayotimda borliging uchun rahmat.</strong><br>Hurmat bilan, Dilorom</p>
+  </section>
+
+  </main>
+
+<script>
+  (function () {
+    var intro = document.getElementById('intro');
+    var main = document.getElementById('main');
+    var leaves = document.getElementById('leaves');
+    for (var i = 0; i < 16; i++) {
+      var l = document.createElement('span');
+      l.className = 'leaf';
+      l.style.setProperty('--s', (18 + Math.random() * 26) + 'px');
+      l.style.setProperty('--x', (Math.random() * 96) + '%');
+      l.style.setProperty('--d', (9 + Math.random() * 9) + 's');
+      l.style.setProperty('--delay', (-Math.random() * 18) + 's');
+      l.style.setProperty('--sway', ((Math.random() * 80) - 40) + 'px');
+      l.style.setProperty('--ty', (Math.random() * 90) + '%');
+      leaves.appendChild(l);
+    }
+    var answers = document.getElementById('answers');
+    var hint = document.getElementById('hint');
+    var lines = [
+      'Are you sure?',
+      'Think again...',
+      'Look how big the Yes button is getting.',
+      'Okay, take your time.',
+      'Just press Yes, you know you want to.'
+    ];
+    var n = 0;
+    document.getElementById('no').addEventListener('click', function () {
+      n += 1;
+      hint.textContent = lines[Math.min(n - 1, lines.length - 1)];
+      answers.style.setProperty('--ys', Math.min(1 + n * 0.18, 2));
+      answers.style.setProperty('--ns', Math.max(1 - n * 0.12, 0.6));
+    });
+    var love = document.getElementById('love');
+    var loveInput = document.getElementById('loveInput');
+    var loveHint = document.getElementById('loveHint');
+    document.getElementById('yes').addEventListener('click', function () {
+      intro.hidden = true;
+      love.hidden = false;
+      window.scrollTo(0, 0);
+      loveInput.focus();
+    });
+    document.getElementById('loveForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = loveInput.value.toLowerCase().replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+      if (v.indexOf('love you') > -1 || v === 'ily' || v.indexOf('seni sevaman') > -1 || v === 'sevaman') {
+        if (love.dataset.opening) return;
+        love.dataset.opening = '1';
+        var song = document.getElementById('song');
+        if (song) { try { var pr = song.play(); if (pr && pr.catch) pr.catch(function () {}); } catch (err) {} }
+        var openMain = function () { love.hidden = true; main.hidden = false; window.scrollTo(0, 0); };
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) { openMain(); return; }
+        var burst = document.createElement('div');
+        burst.className = 'burst';
+        burst.setAttribute('aria-hidden', 'true');
+        for (var k = 0; k < 40; k++) {
+          var b = document.createElement('span');
+          b.className = 'bleaf';
+          var ang = Math.random() * Math.PI * 2;
+          var dist = 120 + Math.random() * Math.max(window.innerWidth, window.innerHeight) * 0.5;
+          b.style.setProperty('--s', (20 + Math.random() * 30) + 'px');
+          b.style.setProperty('--bx', (Math.cos(ang) * dist) + 'px');
+          b.style.setProperty('--by', (Math.sin(ang) * dist) + 'px');
+          b.style.setProperty('--br', (Math.random() * 720 - 360) + 'deg');
+          burst.appendChild(b);
+        }
+        document.body.appendChild(burst);
+        setTimeout(openMain, 1300);
+        setTimeout(function () { burst.remove(); }, 1900);
+      } else {
+        loveHint.textContent = "Don't you like me?";
+      }
+    });
+  })();
+  (function () {
+    var messages = [
+      "Siz bilan suhbatlashish menga juda yoqadi.",
+      "Siz bilan gaplashganda vaqt qanday o'tganini bilmay qolaman.",
+      "Do'st bo'lib tanishganimdan xursandman.",
+      "Bu sahifa uchun sizdan bitta tabassum kutaman.",
+      "Siz bor ekansiz, suhbatlar ham qiziqroq.",
+      "Bugun sizga faqat yaxshi xabarlar kelsin.",
+      "Tabassumingiz kimningdir kunini yorug' qilishi mumkin.",
+      "Sizni o'ylab, shu sahifani tayyorladim."
+    ];
+    var msgEl = document.getElementById('msg');
+    var last = -1;
+    document.getElementById('more').addEventListener('click', function () {
+      var i;
+      do { i = Math.floor(Math.random() * messages.length); } while (i === last);
+      last = i;
+      msgEl.classList.add('fade');
+      setTimeout(function () {
+        msgEl.textContent = messages[i];
+        msgEl.classList.remove('fade');
+      }, 220);
+    });
+
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('#tasks input'));
+    var progress = document.getElementById('progress');
+    var KEY = 'mado-quvonchlar';
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+      boxes.forEach(function (b) { if (saved.indexOf(b.id) > -1) b.checked = true; });
+    } catch (e) {}
+    function update() {
+      var n = boxes.filter(function (b) { return b.checked; }).length;
+      var text = '';
+      if (n === 1) text = '1 ta quvonch. Yaxshi boshlanish!';
+      else if (n === 2 || n === 3) text = n + ' ta quvonch. Juda yaxshi ketyapsiz!';
+      else if (n === 4) text = '4 ta quvonch. Zo\'r kun bo\'lyapti!';
+      else if (n === 5) text = 'Hammasi bajarildi. Siz ajoyibsiz!';
+      progress.textContent = text;
+      try {
+        localStorage.setItem(KEY, JSON.stringify(boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.id; })));
+      } catch (e) {}
+    }
+    boxes.forEach(function (b) { b.addEventListener('change', update); });
+    update();
+
+    var orb = document.getElementById('orb');
+    var phase = document.getElementById('phase');
+    var go = document.getElementById('go');
+    var running = false, timer = null, rounds = 0;
+    function step(inhale) {
+      if (!running) return;
+      phase.textContent = inhale ? 'Nafas oling' : 'Sekin chiqaring';
+      timer = setTimeout(function () {
+        if (!inhale) {
+          rounds += 1;
+          if (rounds >= 6) { stop(true); return; }
+        }
+        step(!inhale);
+      }, inhale ? 4000 : 6000);
+    }
+    function stop(done) {
+      running = false; clearTimeout(timer); rounds = 0;
+      orb.classList.remove('run');
+      phase.textContent = done ? 'Ofarin! Endi tabassum qiling.' : 'Tayyormisiz?';
+      go.textContent = 'Qayta boshlash';
+    }
+    go.addEventListener('click', function () {
+      if (running) { stop(false); return; }
+      running = true; rounds = 0;
+      orb.classList.add('run');
+      go.textContent = 'To\'xtatish';
+      step(true);
+    });
+  })();
+
+</script>
+
+</body>
+</html>
